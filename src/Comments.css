@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Akatab:wght@600&family=Caprasimo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Montserrat:ital,wght@1,200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Reem+Kufi&display=swap');
+
+.DeleteIcon :hover{
+    cursor: pointer;
+}
+
+.UserFirstLastName{
+ cursor: pointer;
+ font-family: 'Caprasimo', cursive;
+ font-family: 'Montserrat', sans-serif;
+ color: black;
+ margin-left: 5px;
+}
+
+.UserProfileImage{
+    width: 35px;
+    height: 25px;
+    border-radius: 10px;
+
+}
+
+.UserInformationParrent{
+    display: flex;
+    margin-left: 20px;
+    margin-top: 5px;
+
+}
+
+.Content{
+    width: 600px;
+    height: 200px;
+    border: 1px solid gray;
+    margin-top: 20px;
+}
+
+.UserName{
+    font-family: 'Akatab', sans-serif;
+    margin-left: 105px;
+}

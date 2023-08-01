@@ -1,0 +1,106 @@
+.body{
+    background-image: url("./BackgroundForm.jpg");
+    background-size: cover;
+}
+
+.parrentDiv{
+    display: flex;
+    justify-Content: center;
+    align-Items: center;
+    margin-Top: 100p;
+}
+
+.ChildDiv{
+    background-Color: #314463;
+    height: 250px;
+    width: 400px;
+    border-radius: 10px;
+}
+
+.FormDiv{
+    margin-top: "30px";
+}
+
+/* SignupStyle.css */
+
+.progressBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    background-color: #dcdcdc;
+    top: 2px;
+    border-radius: 7px;
+    height: 4px;
+    margin-bottom: 40px;
+  }
+  
+  .Progress-step {
+    width: 25px;
+    height: 25px;
+    background-color: #dcdcdc;
+    border-radius: 50%;
+    text-align: center;
+    color: #fff;
+  }
+  
+  /* Center align text in each progress step */
+  .Progress-step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Style for the active step */
+  .Progress-step.active {
+    background-color: #800080;
+  }
+  
+  /* Styles for the form inputs and buttons */
+  .form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .btn {
+    background-color: #800080;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    background-color: #800080;
+  }
+  
+  /* Center align text in the form buttons */
+  .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Center align the form input elements */
+  div[style^="text-align: center"] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Styles for the main header */
+  header {
+    text-align: center;
+  }
+  
+  /* Styles for the parent and child divs */
+  .parrentDiv {
+    display: flex;
+    justify-content: center;
+  }
+  
+  
