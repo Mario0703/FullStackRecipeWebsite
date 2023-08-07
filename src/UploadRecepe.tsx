@@ -55,7 +55,8 @@ export function RecipeUpload() {
       .post("http://localhost:5000/SubmitRecipe", formData, {
         headers: {
           "Content-Type": "multipart/form-data", // Set the content type to 'multipart/form-data'
-        },
+        },          withCredentials: true,
+
       })
       .then((response) => {
         console.log(response);

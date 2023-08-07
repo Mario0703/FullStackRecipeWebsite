@@ -11,7 +11,7 @@ db = SQLAlchemy(app)
 app.secret_key = "hello"
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = True
-UPLOAD_FOLDER = 'F:\Programmerings Hobby\Recipe\Recipe Project\SavedRecipe Images'
+UPLOAD_FOLDER = 'C:\My apps\FullStackRecipeWebsite\SavedRecipe Images'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -19,30 +19,32 @@ CORS(app, supports_credentials=True)
 
 app.permanent_session_lifetime = timedelta(minutes=5)
 
-class Testb7(db.Model):
+class RecipeDB1(db.Model):
     name = db.Column(db.String,primary_key=True)
     ingredients_string = db.Column(db.String)
     ImagePath = db.Column(db.String)
     decription = db.Column(db.String)
     first_name = db.Column(db.String)
+    AUTHOR_ID = db.Column(db.String)
     id = db.Column(db.String)
 
-class Users2(db.Model,UserMixin):
+class UsersDB(db.Model,UserMixin):
     id = db.Column(db.String, primary_key=True)
     User_Name = db.Column(db.String(20), unique=True)
     User_email = db.Column(db.String(80))
     User_Password = db.Column(db.String(80))
 
-class MessageLogs9(db.Model):
+class MessagesDB(db.Model):
     Content = db.Column(db.String,primary_key=True)
     Message_ID = db.Column(db.String)
     Recipe_ID = db.Column(db.String,primary_key=True)
 
+#Debug, remove later
 @app.route("/View", methods=["GET"])
 def View():    
-    Querry = Testb7.query.all()
-    Querry2 = MessageLogs9.query.all()
-    Querry3 = Users2.query.all()
+    Querry = RecipeDB1.query.all()
+    Querry2 = MessagesDB.query.all()
+    Querry3 = UsersDB.query.all()
 
     for Datapoints in Querry:
         print(Datapoints.ImagePath)
@@ -69,7 +71,7 @@ def SubmitComment():
     Id = data.get("recipeId")
     content = data.get("messageString")
     MessageID = data.get("MessageID")
-    MessageDB = MessageLogs9(Content=content,Recipe_ID=Id,Message_ID=MessageID )
+    MessageDB = MessagesDB(Content=content,Recipe_ID=Id,Message_ID=MessageID )
     db.session.add(MessageDB)
     db.session.commit()
     return "Data has been added to the database"
@@ -86,11 +88,14 @@ def GetID():
 @app.route("/GetComment/<ID>", methods=["GET"])
 def RetrieveComments(ID):
     data = []
-    messages = MessageLogs9.query.all()
+    messages = MessagesDB.query.all()
+    
     for message in messages:
         if str(ID) == str(message.Recipe_ID):  # Comparing as strings to handle potential data type mismatches
             data.append({"Message": message.Content, "Recipe_ID": message.Recipe_ID, "MessageID": message.Message_ID})
     return jsonify(data)
+
+    
         
 
     
@@ -103,26 +108,48 @@ def submit():
     file = request.files["file"]
     Decription = request.form["Decription"]
     First_name = request.form["First-name"]
-    
-    if file and allowed_file(file.filename):
-        filename = file.filename
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        PathToimage = f"{UPLOAD_FOLDER}\{file.filename}"
-
-        new_recipe = Testb7(name=Name,ingredients_string=list,ImagePath=PathToimage, id=ID, decription=Decription, first_name=First_name)
-        
-        db.session.add(new_recipe)
-        db.session.commit()
-        
-        return "Succes!"
+    if "UserID" in session:
+        if file and allowed_file(file.filename):
+            filename = file.filename
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            PathToimage = f"{UPLOAD_FOLDER}\{file.filename}"
+            Author = session.get("UserID")
+            new_recipe = RecipeDB1(name=Name,ingredients_string=list,ImagePath=PathToimage, id=ID, decription=Decription, first_name=First_name,AUTHOR_ID=Author)
+            
+            db.session.add(new_recipe)
+            db.session.commit()
+            
+            return "Succes!"
+        else:
+            return "Post request has faild"
     else:
-        return "Post request has faild"
+        return "Must be logged in to post"
+
+@app.route("/RetriveUserRecipes", methods=["GET"])
+def UserRecipes():
+    Author = session.get("UserID")
+    query = RecipeDB1.query.filter_by(AUTHOR_ID=Author).all()
+    if query:
+        recipes_list = [{"name": recipe.name} for recipe in query]
+        return jsonify(recipes_list) 
+    else:
+        return "No recipes!"
+@app.route("/RetriveUserInformation", methods = ["GET"])
+def UserinfomationJSON():
+    if "username" in session:
+        USERID = session.get("UserID")
+        UserInfomationRow = UsersDB.query.filter_by(id=USERID).first()
+        print(UserInfomationRow)
+        UserJSON = [{"name": UserInfomationRow.User_Name, "email": UserInfomationRow.User_email }]
+        return jsonify(UserJSON)
+    else:
+        return "User not in session!"
 
 @app.route("/DeleteComment", methods=["DELETE"])
 def DeleteComment():
     data = request.get_json()
     Message_To_Delete = data.get("MessageID")
-    message_to_delete = MessageLogs9.query.filter_by(Message_ID=Message_To_Delete).first()
+    message_to_delete = MessagesDB.query.filter_by(Message_ID=Message_To_Delete).first()
     
     if Message_To_Delete: 
         db.session.delete(message_to_delete)
@@ -135,25 +162,27 @@ def DeleteComment():
 def ConfirmLogin():
     user_email = request.form["Email"]
     user_password = request.form["Password"]
-    queery = Users2.query.all()
-    user = Users2.query.filter_by(User_email=user_email, User_Password=user_password).first()
+    queery = UsersDB.query.all()
+    user = UsersDB.query.filter_by(User_email=user_email, User_Password=user_password).first()
     print(queery,user, user_email, user_password)
     if user:
         session["username"] = user_email
+        session["UserID"] = user.id
         print(session["username"])
         return (session["username"])
         
     else:
-        # User doesn't exist or credentials are incorrect
         return jsonify({"message": "Invalid email or password"})
 
 @app.route("/check_login", methods=["GET"])
 def check_login():
     if "username" in session:
         name = session.get("username")
+        Id = session.get("UserID")
+        print(Id)
         return jsonify(name)
     else:
-        return "No user logged in!"
+        return "go to login to login!"
 
 @app.route("/CreateUser", methods=["POST"])
 def CreateUser():
@@ -163,7 +192,7 @@ def CreateUser():
     password = data.get('password')
     User_ID = data.get('User_ID')
     print(email)
-    New_User = Users2(id=User_ID,User_Name=Name,User_email=email,User_Password=password)
+    New_User = UsersDB(id=User_ID,User_Name=Name,User_email=email,User_Password=password)
     db.session.add(New_User)
     db.session.commit()
     return "User Created"            
@@ -174,8 +203,7 @@ def ChangeContent():
     data = request.get_json()
     Id_Of_Message = data.get("MessageID")
     editedPost = data.get("editedPost")
-    Id_Of_Recipe = data.get("recipeId")
-    query = MessageLogs9.query.filter_by(Message_ID = Id_Of_Message).first()
+    query = MessagesDB.query.filter_by(Message_ID = Id_Of_Message).first()
     if (query):
         query.Content = editedPost
         db.session.commit()
@@ -185,7 +213,7 @@ def ChangeContent():
 
 @app.route ('/GetRecipeData', methods=['GET'])
 def RetriveData():
-    recipes = Testb7.query.all()
+    recipes = RecipeDB1.query.all()
     data_list = [{"name": recipe.name, "ingredients_string": recipe.ingredients_string, "ImagePath": recipe.ImagePath, "ID": recipe.id, "First_name": recipe.first_name,"Desription": recipe.decription} for recipe in recipes]
     return jsonify(data_list )
 

@@ -5,6 +5,7 @@ import { ViewRecipe } from "./recipe1";
 import { RecipeUpload } from "./UploadRecepe";
 import { SignupForm } from "./Signup";
 import { Loggin } from "./Login";
+import { ViewUserProfile } from "./ViewUserProfile";
 function App() {
   return (
     <>
@@ -14,6 +15,7 @@ function App() {
         <Route path="/Upload" element={<RecipeUpload></RecipeUpload>}></Route>
         <Route path="/Sign-Up" element={<SignupForm></SignupForm>}></Route>
         <Route path="/Login" element={<Loggin></Loggin>}></Route>
+        <Route path="/Profile" element={<ViewUserProfile></ViewUserProfile>}></Route>
         <Route
           path="/recipe1/:recipeId"
           element={<ViewRecipe></ViewRecipe>}
