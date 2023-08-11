@@ -33,13 +33,13 @@ const Icon = (props: SocialMediaIcon) => {
 
 export function Footer() {
   return (
-    <div style={{ marginTop: "12em" }}>
+    <div style={{ position: "relative", minHeight: "100vh" }}>
       <footer
         style={{
           bottom: "10px",
           width: "100%",
-          marginTop: "auto",
           display: "flex",
+          position: "absolute",
           justifyContent: "space-between",
           alignItems: "center",
           backgroundColor: "#FFE17B",

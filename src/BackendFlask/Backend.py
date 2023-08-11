@@ -11,13 +11,13 @@ db = SQLAlchemy(app)
 app.secret_key = "hello"
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = True
-UPLOAD_FOLDER = 'C:\My apps\FullStackRecipeWebsite\SavedRecipe Images'
+UPLOAD_FOLDER = 'F:\Programmerings Hobby\Recipe\Recipe Project\SavedRecipe Images'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 CORS(app, supports_credentials=True)
 
-app.permanent_session_lifetime = timedelta(minutes=5)
+app.permanent_session_lifetime = timedelta(minutes=30)
 
 class RecipeDB1(db.Model):
     name = db.Column(db.String,primary_key=True)
@@ -130,10 +130,12 @@ def UserRecipes():
     Author = session.get("UserID")
     query = RecipeDB1.query.filter_by(AUTHOR_ID=Author).all()
     if query:
-        recipes_list = [{"name": recipe.name} for recipe in query]
+        recipes_list = [{"name": recipe.name, "id": recipe.id} for recipe in query]
         return jsonify(recipes_list) 
     else:
         return "No recipes!"
+    
+
 @app.route("/RetriveUserInformation", methods = ["GET"])
 def UserinfomationJSON():
     if "username" in session:
@@ -157,6 +159,23 @@ def DeleteComment():
         return "Data has been deleted"
     else:
          return "Faild, data has not been deleteed"
+
+@app.route("/DeleteRecipe/<ID>", methods=["DELETE"])
+def deleteRecipe(ID):
+    recipe_to_delete = RecipeDB1.query.filter_by(id=ID).first()
+    if(recipe_to_delete):
+        Messeges_To_Recipe = MessagesDB.query.filter_by(Recipe_ID=ID).all()
+        for message in Messeges_To_Recipe:
+            db.session.delete(message)
+            db.session.commit()
+        db.session.delete(recipe_to_delete)
+        db.session.commit()
+    return "the recipe has been deleted"
+
+@app.route("/logout",methods=["POST", "GET"])
+def Logout():
+    session.clear()
+    return "logout"
 
 @app.route("/login",methods=["POST", "GET"])
 def ConfirmLogin():

@@ -7,7 +7,6 @@ import "./LandningPage.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-
 const Search = () => {
   return (
     <div>
@@ -21,23 +20,20 @@ const Search = () => {
   );
 };
 
-interface Search {}
-
 export function MainLandingPage() {
   const [name, SetUsername] = useState("");
-
- 
+  const [Loggedin, SetLogin] = useState(false);
 
   const LogoutTemp = async () => {
     try {
       await axios.get("http://localhost:5000/logout", {
         withCredentials: true,
       });
+      SetLogin(false);
     } catch (error) {
       // Handle errors here
       console.log("Error fetching login status:");
     }
-    LogoutTemp();
   };
 
   useEffect(() => {
@@ -48,6 +44,7 @@ export function MainLandingPage() {
         });
         SetUsername(response.data);
         console.log(response.data);
+        SetLogin(true);
       } catch (error) {
         // Handle errors here
         console.log("Error fetching login status:");
@@ -70,8 +67,15 @@ export function MainLandingPage() {
         }}
       >
         <h1>Yummy!</h1>
-        <div>{name}</div>
-        <Search></Search>
+        <div>
+          {Loggedin ? (
+            <div>
+              Hello, {name} <p onClick={LogoutTemp}>Click me to logout!</p>
+            </div>
+          ) : (
+            <p>You are not logged in</p>
+          )}
+        </div>
       </header>
       <BasicExample></BasicExample>
       <div
@@ -93,7 +97,7 @@ export function MainLandingPage() {
             <FoodRecipies></FoodRecipies>
           </div>
         </div>
-        <div></div>={" "}
+        <div></div>{" "}
       </div>
       <Footer></Footer>
     </>
