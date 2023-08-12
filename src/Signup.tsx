@@ -16,7 +16,7 @@ const ShorProgress = (props: progressProps) => {
         alignItems: "center",
         justifyContent: "space-between",
         position: "relative",
-        backgroundColor: "#c3cdde",
+        backgroundColor: "#0f16db",
         top: "2px",
         borderRadius: "7px",
         height: "4px",
@@ -31,7 +31,7 @@ const ShorProgress = (props: progressProps) => {
           style={{
             width: "25px",
             height: "25px",
-            backgroundColor: index === 0 ? "#800080" : "#dcdcdc",
+            backgroundColor: index === 0 ? "#0f16db" : "#dcdcdc",
             borderRadius: "50%",
             textAlign: "center",
             color: "#fff",
@@ -60,6 +60,7 @@ const SignUpProgress: React.FC<SignUpProps> = ({
   const [password, SetPassword] = useState("");
   const inputElement = useRef<HTMLInputElement>(null);
   const UserID = uuidv4();
+  let color = "0f16db";
   const formData = new FormData();
   formData.append("name", name);
   formData.append("email", email);
@@ -71,7 +72,7 @@ const SignUpProgress: React.FC<SignUpProps> = ({
     SetSignupState("email");
     console.log(name);
     if (circleRef[1].current) {
-      circleRef[1].current.style.backgroundColor = "#800080";
+      circleRef[1].current.style.backgroundColor = "#0f16db";
     }
     inputElement.current
       ? (inputElement.current.value = "")
@@ -100,14 +101,14 @@ const SignUpProgress: React.FC<SignUpProps> = ({
     event.preventDefault(); // Prevent form submission
     SetSignupState("password");
     if (circleRef[2].current) {
-      circleRef[2].current.style.backgroundColor = "#800080";
+      circleRef[2].current.style.backgroundColor = color;
     }
   };
   const OntoSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault(); // Prevent form submission
     SetSignupState("Submit");
     if (circleRef[3].current) {
-      circleRef[3].current.style.backgroundColor = "#800080";
+      circleRef[3].current.style.backgroundColor = color;
     }
   };
 

@@ -10,7 +10,7 @@ body{
 }
 
 .ChildDiv{
-    background-Color: #bfc1db;
+    background-Color: #fff;
     opacity: 0.9;
     height: 550px;
     width: 700px;
@@ -53,7 +53,7 @@ body{
   
   /* Style for the active step */
   .Progress-step.active {
-    background-color: #800080;
+    background-color: #000b80;
   }
   
   /* Styles for the form inputs and buttons */
@@ -66,7 +66,7 @@ body{
   }
   
   .btn {
-    background-color: #800080;
+    background-color: #3b37ae;
     color: #fff;
     border: none;
     padding: 10px 15px;
@@ -75,7 +75,7 @@ body{
   }
   
   .btn-primary {
-    background-color: #800080;
+    background-color: #1d10d7;
   }
   
   /* Center align text in the form buttons */

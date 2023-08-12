@@ -5,6 +5,7 @@ import { Footer } from "./Footer";
 interface RecipeArray {
   name: string;
   id: string;
+  Recipes: Boolean;
 }
 
 interface Userdata {
@@ -21,6 +22,9 @@ export function ViewUserProfile() {
           `http://localhost:5000/DeleteRecipe/${data[index].id}`
         )
       : console.log("No ID");
+    await axios.get("http://localhost:5000/RetriveUserRecipes", {
+      withCredentials: true,
+    });
   };
   useEffect(() => {
     const retrieveUserRecipe = async () => {
@@ -33,11 +37,12 @@ export function ViewUserProfile() {
           "http://localhost:5000/RetriveUserRecipes",
           { withCredentials: true }
         );
-        if (Object.keys(response).length) {
+        if (response.data[0].Recipes) {
           setData(response.data);
+          console.log(response);
         }
 
-        if (Object.keys(UserReponse).length) {
+        if (Object.keys(UserReponse).length > 0) {
           SetUserData(UserReponse.data);
         }
       } catch (error) {
@@ -79,7 +84,6 @@ export function ViewUserProfile() {
                 <p>Error</p>
               )}
             </div>
-            <p>Submitted Recipes:</p>
             <div
               style={{
                 margin: "auto",
@@ -90,6 +94,7 @@ export function ViewUserProfile() {
             >
               {data ? (
                 <ul>
+                  <p>Submitted Recipes:</p>
                   {data.map((recipe, index) => (
                     <div
                       style={{
@@ -119,7 +124,7 @@ export function ViewUserProfile() {
                   ))}
                 </ul>
               ) : (
-                <p>No recipes found!</p>
+                <p style={{ marginLeft: "60px" }}>No recipes found!</p>
               )}
             </div>
           </section>

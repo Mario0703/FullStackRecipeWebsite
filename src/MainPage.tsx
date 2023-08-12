@@ -7,19 +7,6 @@ import "./LandningPage.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-const Search = () => {
-  return (
-    <div>
-      <input
-        placeholder="Search for a Recipe here!"
-        className="form-control"
-        style={{ width: "500px", display: "inline-block" }}
-      ></input>
-      <button className="btn btn-primary">Search!</button>
-    </div>
-  );
-};
-
 interface userInforArray {
   name: string;
   logged_in: Boolean;
@@ -67,13 +54,16 @@ export function MainLandingPage() {
         {info.length > 0 && info[0].logged_in ? (
           <div>
             Welcome, {info[0].name} <br></br>
-            <button onClick={logout}>Click me to log out!</button>
+            <button className="btn btn-primary" onClick={logout}>
+              Click me to log out!
+            </button>
           </div>
         ) : (
           <p>Not logged in</p>
         )}
       </header>
       <BasicExample></BasicExample>
+
       <div
         style={{
           display: "flex",
