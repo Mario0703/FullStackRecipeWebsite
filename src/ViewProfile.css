@@ -1,0 +1,8 @@
+body{
+    background-image: url("/src/BackgroundForm.jpg");
+}
+
+.Content{
+    background-color: #fff;
+    border-radius: 10px;
+}

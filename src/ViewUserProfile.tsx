@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { BasicExample } from "./NavBar";
+import { Footer } from "./Footer";
 interface RecipeArray {
   name: string;
   id: string;
@@ -50,17 +51,24 @@ export function ViewUserProfile() {
     <>
       {" "}
       <BasicExample></BasicExample>
+      <link
+        href="./src/ViewProfile.css"
+        rel="stylesheet"
+        type="text/css"
+      ></link>
       <div style={{ display: "flex", marginTop: "40px" }}>
         <div
-          style={{ margin: "auto", border: "1px solid black", width: "400px" }}
+          className="Content"
+          style={{ margin: "auto", width: "400px", textAlign: "center" }}
         >
           <header>
             <h1>This is your profile!</h1>
             <h4>
-              {UserData ? <p>Welcome, {UserData[0].name}</p> : <p>Errir</p>}
+              {UserData ? <p>Welcome, {UserData[0].name}</p> : <p>Error</p>}
             </h4>
-            <span>View all your information and your uploaded recipes!</span>
           </header>
+          <span>View all your information and your uploaded recipes!</span>
+
           <section>
             <div>
               {UserData ? (
@@ -68,38 +76,56 @@ export function ViewUserProfile() {
                   <br></br>Assigned Email: {UserData[0].email}
                 </p>
               ) : (
-                <p>Errir</p>
+                <p>Error</p>
               )}
             </div>
             <p>Submitted Recipes:</p>
-            {data ? (
-              <ul>
-                {data.map((recipe, index) => (
-                  <div
-                    style={{
-                      width: "200px",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      marginBottom: "16px",
-                    }}
-                    key={index}
-                  >
-                    <li style={{ display: "inline-block" }}>{recipe.name}</li>
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => logIndex(index)}
+            <div
+              style={{
+                margin: "auto",
+                display: "flex",
+                justifyContent: "center",
+                marginRight: "60px",
+              }}
+            >
+              {data ? (
+                <ul>
+                  {data.map((recipe, index) => (
+                    <div
+                      style={{
+                        width: "200px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBottom: "16px",
+                      }}
+                      key={index}
                     >
-                      Delete Recipe
-                    </button>
-                  </div>
-                ))}
-              </ul>
-            ) : (
-              <p>No recipes found!</p>
-            )}
+                      <li
+                        style={{
+                          display: "inline-block",
+                          listStyleType: "none",
+                          marginLeft: "30px",
+                        }}
+                      >
+                        {recipe.name}
+                      </li>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => logIndex(index)}
+                      >
+                        Delete Recipe
+                      </button>
+                    </div>
+                  ))}
+                </ul>
+              ) : (
+                <p>No recipes found!</p>
+              )}
+            </div>
           </section>
         </div>
       </div>
+      <Footer></Footer>
     </>
   );
 }

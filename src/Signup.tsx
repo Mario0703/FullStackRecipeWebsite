@@ -16,7 +16,7 @@ const ShorProgress = (props: progressProps) => {
         alignItems: "center",
         justifyContent: "space-between",
         position: "relative",
-        backgroundColor: "#dcdcdc",
+        backgroundColor: "#c3cdde",
         top: "2px",
         borderRadius: "7px",
         height: "4px",
@@ -58,6 +58,7 @@ const SignUpProgress: React.FC<SignUpProps> = ({
   const [name, setName] = useState("");
   const [email, setemail] = useState("");
   const [password, SetPassword] = useState("");
+  const inputElement = useRef<HTMLInputElement>(null);
   const UserID = uuidv4();
   const formData = new FormData();
   formData.append("name", name);
@@ -72,6 +73,9 @@ const SignUpProgress: React.FC<SignUpProps> = ({
     if (circleRef[1].current) {
       circleRef[1].current.style.backgroundColor = "#800080";
     }
+    inputElement.current
+      ? (inputElement.current.value = "")
+      : console.log("error");
   };
 
   const handleInputChange = (event: any) => {
@@ -129,8 +133,10 @@ const SignUpProgress: React.FC<SignUpProps> = ({
               className="form-control"
               type="text"
               name="name"
+              style={{ marginTop: "50px" }}
               placeholder="Your name"
               onChange={handleInputChange}
+              ref={inputElement}
             />
           </label>{" "}
           <button className="btn btn-primary" onClick={handleNext}>
@@ -211,18 +217,21 @@ const SignUpProgress: React.FC<SignUpProps> = ({
 export function SignupForm() {
   const [SignupState, SetSignupState] = useState("name");
   const circleRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
-
   return (
     <>
-      <link href="src\SignupStyle.css" rel="stylesheet" type="text/css"></link>
+      <link
+        href="./src/SignupStyle.css"
+        rel="stylesheet"
+        type="text/css"
+      ></link>
       <BasicExample></BasicExample>
-      <header style={{ textAlign: "center" }}>
-        {" "}
-        <h1>Sign up!</h1>
-      </header>
+      <header style={{ textAlign: "center" }}> </header>
 
       <div className="parrentDiv">
         <div className="ChildDiv">
+          <div style={{ textAlign: "center" }}>
+            <h1>Sign up!</h1>
+          </div>
           <div style={{ marginTop: "30px" }}>
             <ShorProgress circleRef={circleRefs}></ShorProgress>
             <form encType="multipart/form-data" className="form-group">

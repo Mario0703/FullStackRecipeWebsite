@@ -20,20 +20,19 @@ const Search = () => {
   );
 };
 
-export function MainLandingPage() {
-  const [name, SetUsername] = useState("");
-  const [Loggedin, SetLogin] = useState(false);
+interface userInforArray {
+  name: string;
+  logged_in: Boolean;
+}
 
-  const LogoutTemp = async () => {
-    try {
-      await axios.get("http://localhost:5000/logout", {
-        withCredentials: true,
-      });
-      SetLogin(false);
-    } catch (error) {
-      // Handle errors here
-      console.log("Error fetching login status:");
-    }
+export function MainLandingPage() {
+  let [info, SetInfo] = useState<userInforArray[]>([]);
+
+  const logout = async () => {
+    await axios.get("http://localhost:5000/logout", {
+      withCredentials: true,
+    });
+    SetInfo([]);
   };
 
   useEffect(() => {
@@ -42,12 +41,10 @@ export function MainLandingPage() {
         const response = await axios.get("http://localhost:5000/check_login", {
           withCredentials: true,
         });
-        SetUsername(response.data);
-        console.log(response.data);
-        SetLogin(true);
+        SetInfo(response.data);
       } catch (error) {
         // Handle errors here
-        console.log("Error fetching login status:");
+        console.log("Error fetching login status:", error);
       }
     };
     fetchLoginStatus();
@@ -67,15 +64,14 @@ export function MainLandingPage() {
         }}
       >
         <h1>Yummy!</h1>
-        <div>
-          {Loggedin ? (
-            <div>
-              Hello, {name} <p onClick={LogoutTemp}>Click me to logout!</p>
-            </div>
-          ) : (
-            <p>You are not logged in</p>
-          )}
-        </div>
+        {info.length > 0 && info[0].logged_in ? (
+          <div>
+            Welcome, {info[0].name} <br></br>
+            <button onClick={logout}>Click me to log out!</button>
+          </div>
+        ) : (
+          <p>Not logged in</p>
+        )}
       </header>
       <BasicExample></BasicExample>
       <div

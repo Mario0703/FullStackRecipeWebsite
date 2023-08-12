@@ -1,19 +1,19 @@
-.body{
-    background-image: url("./BackgroundForm.jpg");
-    background-size: cover;
+body{
+    background-image: url("./BackgroundForm.jpg")
 }
 
 .parrentDiv{
     display: flex;
     justify-Content: center;
     align-Items: center;
-    margin-Top: 100p;
+    margin-Top: 100px;
 }
 
 .ChildDiv{
-    background-Color: #314463;
-    height: 250px;
-    width: 400px;
+    background-Color: #bfc1db;
+    opacity: 0.9;
+    height: 550px;
+    width: 700px;
     border-radius: 10px;
 }
 
